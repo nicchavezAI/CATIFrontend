@@ -1,12 +1,13 @@
-import Navbar from "./components/navabar"
+import Header from "./components/header"
+import Sidebar from "./components/sidebar"
 
 function App() {
 
   return (
-    <div className="bg-gray-950 text-zinc-50 min-h-screen">
-      <Navbar/>
-      <h1>Hello world!</h1>
-    </div>
+    <main className="bg-gray-950 text-zinc-50 min-h-screen">
+      <Header/>
+      <Sidebar/>
+    </main>
     
   )
 }
