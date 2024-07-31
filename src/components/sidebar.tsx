@@ -7,7 +7,7 @@ import SidebarOption from "./sidebarOption";
 
 const Sidebar: React.FC = () => {
   return (
-    <nav className="bg-[#18181B] flex flex-col h-[calc(100vh-5rem)] text-base p-4 z-10 shadow-sm w-[20.5%] overflow-y-auto">
+    <nav className="bg-[#18181B] flex flex-col h-[calc(100vh-4rem)] text-base p-4 z-10 shadow-sm w-[20.5%] overflow-y-auto">
       <NewChatButton />
       <div className="h-3/5 overflow-y-auto my-1">
         <ChatList date="Today"/>
