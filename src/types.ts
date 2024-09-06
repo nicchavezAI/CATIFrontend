@@ -10,7 +10,8 @@ export interface MessageType {
     id: string;             // Identificador único del mensaje
     sender: SenderEnum;         // Nombre del remitente del mensaje
     content: string;        // Contenido del mensaje
-    timestamp: Date;        // Fecha y hora en que se envió el mensaje
+    timestamp: Date;
+    sources: string[];        // Fecha y hora en que se envió el mensaje
   }
   
 // Define el tipo para un chat, que incluye una lista de mensajes y otros detalles

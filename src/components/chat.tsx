@@ -7,7 +7,7 @@ function Chat() {
   const { addMessage, chat } = useCurrentChat();
   const idRef = useRef(0); // Para manejar el id persistente
   const lastProcessedMessageRef = useRef<string | null>(null); // Para rastrear el contenido del último mensaje procesado
-
+  const messagesEndRef = useRef(null);
   useEffect(() => {
     // Verificar que haya mensajes y que el último mensaje sea del usuario
     if (chat && chat.messages.length > 0) {
@@ -20,7 +20,7 @@ function Chat() {
       ) {
         const sendMessage = async () => {
           try {
-            const response = await fetch('http://127.0.0.1:8000/chatbot/answer', {
+            const response = await fetch(' http://127.0.0.1:8000/chatbot/answer', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -33,11 +33,13 @@ function Chat() {
             }
 
             const data = await response.json();
+            console.log(data)
             const newMessage: MessageType = {
               id: String(idRef.current++), // Incrementar el id
               sender: SenderEnum.Cati,
               content: data.answer,
               timestamp: new Date(),
+              sources: data.kbs,
             };
 
             addMessage(newMessage);
@@ -53,6 +55,12 @@ function Chat() {
     }
   }, [chat, addMessage]); // Asegúrate de incluir chat en las dependencias
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chat?.messages]);
+
 
 
   return (
@@ -63,9 +71,11 @@ function Chat() {
             message={message.content}
             image={message.sender === SenderEnum.User ? './src/assets/profile.jpg' : ''}
             person={message.sender === SenderEnum.User ? 'Nicolas Chavez' : 'CATi'}
+            sources={message.sources}
           />
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 }
