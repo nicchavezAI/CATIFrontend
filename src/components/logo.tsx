@@ -7,7 +7,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ style }) => {
   return (
     <div className={`${style} relative`}>
-      <img src="./src/assets/Deloitte.png" alt="Logo" className='h-full w-full object-contain' />
+      <img src="" alt="Logo" className='h-full w-full object-contain' />
     </div>
   );
 }
