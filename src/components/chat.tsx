@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCurrentChat } from "../context/currentChatContext";
 import { MessageType, SenderEnum } from "../types";
 import Message from "./message";
@@ -6,8 +6,10 @@ import Message from "./message";
 function Chat() {
   const { addMessage, chat } = useCurrentChat();
   const idRef = useRef(0); // Para manejar el id persistente
-  const lastProcessedMessageRef = useRef<string | null>(null); // Para rastrear el contenido del último mensaje procesado
+  const lastProcessedMessageRef = useRef<string | null>(null); // Para rastrear el contenido del último mensaje 
+  const typingMessageRef = useRef(null); // Referencia al mensaje de "typing"
   const messagesEndRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false); // Estado para manejar el indicador de "typing"
   useEffect(() => {
     // Verificar que haya mensajes y que el último mensaje sea del usuario
     if (chat && chat.messages.length > 0) {
@@ -20,6 +22,8 @@ function Chat() {
       ) {
         const sendMessage = async () => {
           try {
+            setIsTyping(true); // Mostrar el indicador de "typing"
+            console.log(isTyping)
             const response = await fetch(' http://127.0.0.1:8000/chatbot/answer', {
               method: 'POST',
               headers: {
@@ -47,6 +51,8 @@ function Chat() {
             lastProcessedMessageRef.current = lastMessage.content;
           } catch (error) {
             console.error('Error:', error);
+          } finally {
+            setIsTyping(false); // Ocultar el indicador de "typing"
           }
         };
 
@@ -61,10 +67,16 @@ function Chat() {
     }
   }, [chat?.messages]);
 
+  useEffect(() => {
+    if (isTyping && typingMessageRef.current) {
+      typingMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isTyping]);
+
 
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] overflow-y-auto">
+    <div className="flex flex-col h-[calc(100vh-8rem)] overflow-y-auto mx-4">
       {chat?.messages.map((message, index) => (
         <div key={index} className={message.sender === SenderEnum.User ? "self-end mr-2" : "self-start ml-2"}>
           <Message
@@ -75,6 +87,15 @@ function Chat() {
           />
         </div>
       ))}
+      {isTyping && 
+      <div  className={"self-start ml-2"} ref={typingMessageRef} >
+          <Message
+            message={"Typing..."}
+            image={''}
+            person={'CATi'}
+            sources={[]}
+          />
+        </div>} 
       <div ref={messagesEndRef} />
     </div>
   );

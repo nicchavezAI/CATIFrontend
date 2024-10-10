@@ -15,7 +15,7 @@ const Message: React.FC<MessageProps> = ({ message, image, person, sources }) =>
     
     return (
         <div className=" flex flex-row space-x-2 items-start">
-            <Avatar src={image} name={person} className="mt-2" size='md'/>
+            {person === 'CATi' ? <Avatar src={image} name={person} className="mt-2" size='md'/> : null}
             <div className="max-w-3xl break-words p-3 my-2 bg-gray-800 text-white rounded-lg relative self-start overflow-hidden" style={{ whiteSpace: 'pre-line' }}>
                 <div dangerouslySetInnerHTML={{ __html: message.toString() }} />
                 {person === 'unavailable for now :(' ? //No esta disponible por ahora :(
